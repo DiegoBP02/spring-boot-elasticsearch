@@ -2,6 +2,7 @@ package com.bpdev.elasticsearch.controller;
 
 import com.bpdev.elasticsearch.document.Person;
 import com.bpdev.elasticsearch.document.Vehicle;
+import com.bpdev.elasticsearch.helper.VehicleDummyDataService;
 import com.bpdev.elasticsearch.search.SearchRequestDTO;
 import com.bpdev.elasticsearch.service.PersonService;
 import com.bpdev.elasticsearch.service.VehicleService;
@@ -18,10 +19,16 @@ public class VehicleController {
     @Autowired
     private VehicleService service;
 
+    @Autowired
+    private VehicleDummyDataService vehicleDummyDataService;
+
     @PostMapping
     public void index(@RequestBody final Vehicle vehicle){
         service.index(vehicle);
     }
+
+    @PostMapping("/insertdummydata")
+    public void insertDummyData(){vehicleDummyDataService.insertDummyData();}
 
     @GetMapping("/{id}")
     public Vehicle findById(@PathVariable final String id){
@@ -39,5 +46,14 @@ public class VehicleController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             final Date date){
         return service.getAllVehiclesCreatedSince(date);
+    }
+
+    @PostMapping("/searchcreatedsince/{date}")
+    public List<Vehicle> searchCreatedSince(
+            @RequestBody final SearchRequestDTO dto,
+            @PathVariable
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            final Date date){
+        return service.searchCreatedSince(dto, date);
     }
 }
