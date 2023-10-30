@@ -12,15 +12,21 @@ import java.util.List;
 
 public final class SearchUtil {
 
-    private SearchUtil() {}
+    private SearchUtil() {
+    }
 
     public static SearchRequest buildSearchRequest(final String indexName,
                                                    final SearchRequestDTO dto) {
         try {
+            final int page = dto.getPage();
+            final int size = dto.getSize();
+            final int from = page <= 0 ? 0 : page * size;
             final SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .from(from)
+                    .size(size)
                     .postFilter(getQueryBuilder(dto));
 
-            if(dto.getSortBy() != null){
+            if (dto.getSortBy() != null) {
                 builder.sort(
                         dto.getSortBy(),
                         dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC
@@ -68,7 +74,7 @@ public final class SearchUtil {
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .postFilter(boolQuery);
 
-            if(dto.getSortBy() != null){
+            if (dto.getSortBy() != null) {
                 builder.sort(
                         dto.getSortBy(),
                         dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC

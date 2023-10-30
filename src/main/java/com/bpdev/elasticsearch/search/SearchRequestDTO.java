@@ -1,9 +1,11 @@
 package com.bpdev.elasticsearch.search;
 
 import java.util.List;
+
+import com.bpdev.elasticsearch.search.util.PagedRequestDTO;
 import org.elasticsearch.search.sort.SortOrder;
 
-public class SearchRequestDTO {
+public class SearchRequestDTO extends PagedRequestDTO {
     private List<String> fields;
     private String searchTerm;
     private String sortBy;
